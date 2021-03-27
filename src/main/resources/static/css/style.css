@@ -43,6 +43,29 @@
     margin-bottom: 2em;
 }
 
-.client-name {
-    margin: 1em 0em 1em 0em;
+.client-info {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border-top: 1px solid red;
+    border-bottom: 1px solid red;
+
+}
+
+.client-info-deep {
+    float: right;
+    margin-left: 2em;
+}
+
+
+
+
+.client-photo {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 8em;
+    float: left;
 }

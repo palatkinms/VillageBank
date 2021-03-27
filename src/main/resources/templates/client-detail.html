@@ -27,7 +27,14 @@
             </div>
         </div>
     </nav>
-    <div class="client-name"><h4 th:text="'Клиент: ' + ${client.name}+' '+${client.lastname}"></h4></div>
+    <div class="client-info">
+        <div><img class="client-photo" th:src="${client.photo} ?: 'client photo'"/></div>
+        <div class="client-info-deep">
+            <div class="client-name"><h4 th:text="'Клиент: ' + ${client.name}+' '+${client.lastname}"></h4></div>
+            <div class="client-address"><p th:text="${client.address} ?: 'client adress'"></p></div>
+        </div>
+
+    </div>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -39,7 +46,6 @@
         <tr th:each="account : ${accountList}">
             <td th:text="${account.number}"/>
             <td th:text="${account.fund}"/>
-            <td><a href="/#">account details</a></td>
         </tr>
         </tbody>
     </table>

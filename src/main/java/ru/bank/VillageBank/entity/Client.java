@@ -24,6 +24,12 @@ public class Client {
     @Column(name="lastname")
     private String lastname;
 
+    @Column(name="address")
+    private String address;
+
+    @Column(name="photo")
+    private String photo;
+
     @OneToMany(mappedBy = "client")
     private List<Account> accountList;
 
