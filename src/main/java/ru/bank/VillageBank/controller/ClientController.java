@@ -6,8 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.bank.VillageBank.entity.Account;
 import ru.bank.VillageBank.entity.Client;
+import ru.bank.VillageBank.entity.TransactionLog;
 import ru.bank.VillageBank.service.AccountService;
 import ru.bank.VillageBank.service.ClientService;
+import ru.bank.VillageBank.service.TransactionalLogService;
 
 import java.util.Comparator;
 import java.util.List;
@@ -18,6 +20,12 @@ import java.util.stream.Collectors;
 public class ClientController {
     private ClientService clientService;
     private AccountService accountService;
+    private TransactionalLogService transactionalLogService;
+
+    @Autowired
+    public void setTransactionalLogService(TransactionalLogService transactionalLogService) {
+        this.transactionalLogService = transactionalLogService;
+    }
 
     @Autowired
     public void setAccountService(AccountService accountService) {
@@ -72,7 +80,7 @@ public class ClientController {
     @GetMapping("/{id}/show")
     public String accountDetail(Model model, @PathVariable(value = "id")Long id){
         Client client = clientService.getById(id);
-        List<Account> accountList = accountService.getAccountsByClient(client);
+        List<Account> accountList = accountService.getAccountsByClient(client).stream().sorted(Comparator.comparingInt(Account::getNumber)).collect(Collectors.toList());
         model.addAttribute(client);
         model.addAttribute(accountList);
         return "account-detail";
@@ -88,6 +96,38 @@ public class ClientController {
         model.addAttribute(accountList);
         return "account-detail";
     }
+
+    @GetMapping("/account/{number}")
+    public String showAllTransaction(Model model, @PathVariable(value = "number")Integer number){
+
+        Account account = accountService.getByNumber(number);
+        List<TransactionLog> transactionLogs = transactionalLogService.getAllTransaction(account);
+        transactionLogs = transactionLogs.stream().sorted().collect(Collectors.toList());
+
+        model.addAttribute(account);
+        model.addAttribute(transactionLogs);
+
+        return "transaction-detail";
+    }
+
+    @GetMapping("/{id}/show/{number}/del")
+    public String accountDetail(Model model, @PathVariable(value = "id")Long id,
+                                @PathVariable(value = "number")Integer number){
+        Client client = clientService.getById(id);
+        Account account = accountService.getByNumber(number);
+        String message = "";
+        if(!accountService.deleteAccount(account)){
+            message = "To delete, your account must be empty!";
+        }
+
+        List<Account> accountList = accountService.getAccountsByClient(client).stream().sorted(Comparator.comparingInt(Account::getNumber)).collect(Collectors.toList());
+        model.addAttribute(message);
+        model.addAttribute(client);
+        model.addAttribute(accountList);
+
+        return "account-detail";
+    }
+
 
 
 

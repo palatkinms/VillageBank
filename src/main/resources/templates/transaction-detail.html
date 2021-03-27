@@ -29,34 +29,24 @@
             </div>
         </div>
     </nav>
-    <div class="client-info">
-        <div><img class="client-photo" th:src="${client.photo} ?: 'client photo'"/></div>
-        <div class="client-info-deep">
-            <div class="client-name"><h4 th:text="${client.name}+' '+${client.lastname}"></h4></div>
-            <div class="client-address"><p th:text="${client.address} ?: 'client adress'"></p></div>
-        </div>
-    </div>
     <table class="table table-hover">
         <thead>
         <tr>
-            <th>Account number.</th>
-            <th>Cash balance.</th>
-            <th>Options</th>
-            <th></th>
+            <th>Sender:</th>
+            <th>Receiver: </th>
+            <th>Transfer amount</th>
+            <th>Date</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="account : ${accountList}">
-            <td th:text="${account.number}"/>
-            <td th:text="${account.fund}+'$'"/>
-            <td><a th:href="'/client/account/'+${account.number}">Account transactions</a></td>
-            <td><a th:href="'/client/'+${client.id}+'/show/'+${account.number}+'/del'">Delete account</a></td>
+        <tr th:each="transaction : ${transactionLogList}">
+            <td th:text="${transaction.accountDonor.number}"/>
+            <td th:text="${transaction.accountRecipient.number}"/>
+            <td th:text="${transaction.fund}+'$'"/>
+            <td th:text="${transaction.timestamp}"/>
         </tr>
         </tbody>
     </table>
-    <div><p th:text="${message ?: ''}"></p></div>
-    <div><p><a th:href="'/client/'+${client.id}+'/new'">Сreate a new account</a></p></div>
-
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
 </body>

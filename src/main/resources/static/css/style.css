@@ -5,6 +5,9 @@
 .container {
     background-color: azure;
     min-height: 100%;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+
 }
 
 

@@ -5,13 +5,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bank.VillageBank.entity.Account;
 import ru.bank.VillageBank.entity.Client;
+import ru.bank.VillageBank.entity.TransactionLog;
 import ru.bank.VillageBank.repo.AccountRepo;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
 public class AccountService {
     private AccountRepo accountRepo;
+    private TransactionalLogService transactionalLogService;
+
+    @Autowired
+    public void setTransactionalLogService(TransactionalLogService transactionalLogService) {
+        this.transactionalLogService = transactionalLogService;
+    }
 
     @Autowired
     public void setAccountRepo(AccountRepo accountRepo) {
@@ -45,7 +53,12 @@ public class AccountService {
         fundRecipient +=amount;
         accountDonor.setFund(fundDonor);
         accountRecipient.setFund(fundRecipient);
-
+        TransactionLog transactionLog = new TransactionLog(accountDonor, accountRecipient, amount, new Timestamp(System.currentTimeMillis()));
+        try{
+            transactionalLogService.saveAndFlush(transactionLog);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -53,6 +66,14 @@ public class AccountService {
         accountRepo.saveAndFlush(account);
     }
 
+    public boolean deleteAccount(Account account) {
+        if(account.getFund() == 0){
+            accountRepo.delete(account);
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     public Account generateNewAccount(Client client){
         Integer number = (int)(100_000 + Math.random()*899_999);

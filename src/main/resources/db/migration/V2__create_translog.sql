@@ -1,0 +1,1 @@
+CREATE TABLE transaction (id serial, account_donor_id int REFERENCES account(id), account_recipient_id int REFERENCES account(id), fund int, data timestamp);
