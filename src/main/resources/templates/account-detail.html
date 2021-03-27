@@ -20,29 +20,42 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="floating-button" aria-current="page" href="/client">our Clients</a>
+                        <a aria-current="page" href="/client" class="floating-button">our Clients</a>
                     </li>
                     <li class="nav-item">
-                        <a class="floating-button" href="/client/new">new Clients</a>
+                        <a href="/client/new" class="floating-button">new Clients</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+    <div class="client-info">
+        <div><img class="client-photo" th:src="${client.photo} ?: 'client photo'"/></div>
+        <div class="client-info-deep">
+            <div class="client-name"><h4 th:text="${client.name}+' '+${client.lastname}"></h4></div>
+            <div class="client-address"><p th:text="${client.address} ?: 'client adress'"></p></div>
+        </div>
+    </div>
     <table class="table table-hover">
         <thead>
         <tr>
-            <th>Full list of clients:</th>
+            <th>Account number.</th>
+            <th>Cash balance.</th>
+            <th>Options</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="client : ${clientList}">
-            <td>
-                <a class="list-group-item" th:href="@{'/client/' + ${client.id}}" th:text="${client.name}+' '+${client.lastname}"></a>
-            </td>
+        <tr th:each="account : ${accountList}">
+            <td th:text="${account.number}"/>
+            <td th:text="${account.fund}+'$'"/>
+            <td><a href="#">Account transactions</a></td>
+            <td><a href="#">Delete account</a></td>
         </tr>
         </tbody>
     </table>
+    <div><p><a th:href="'/client/'+${client.id}+'/new'">Сreate a new account</a></p></div>
+
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
 </body>

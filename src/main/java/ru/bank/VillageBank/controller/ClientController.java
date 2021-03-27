@@ -45,7 +45,8 @@ public class ClientController {
 
     @PostMapping("/new")
     public String addNewClient(@ModelAttribute(value = "client") Client client){
-        clientService.saveAndFlush(client);
+        Client clientResult = new Client(client.getName(), client.getLastname());
+        clientService.saveAndFlush(clientResult);
         return "redirect:/";
     }
 
@@ -65,9 +66,30 @@ public class ClientController {
         Account accountDonor = accountService.getById(id);
         Account accountRecipient = accountService.getByNumber(number);
         accountService.transaction(accountDonor, accountRecipient, amount);
-
         return "redirect:/client/"+accountDonor.getClient().getId();
     }
+
+    @GetMapping("/{id}/show")
+    public String accountDetail(Model model, @PathVariable(value = "id")Long id){
+        Client client = clientService.getById(id);
+        List<Account> accountList = accountService.getAccountsByClient(client);
+        model.addAttribute(client);
+        model.addAttribute(accountList);
+        return "account-detail";
+    }
+
+    @GetMapping("/{id}/new")
+    public String addNewAccount(Model model, @PathVariable(value = "id")Long id){
+        Client client = clientService.getById(id);
+        Account account = accountService.generateNewAccount(client);
+        accountService.saveAndFlush(account);
+        List<Account> accountList = accountService.getAccountsByClient(client);
+        model.addAttribute(client);
+        model.addAttribute(accountList);
+        return "account-detail";
+    }
+
+
 
 
 

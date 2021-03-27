@@ -29,7 +29,7 @@ public class ClientService {
 
 
     public void saveAndFlush(Client client){
-        clientRepo.save(client);
+        clientRepo.saveAndFlush(client);
     }
 
 

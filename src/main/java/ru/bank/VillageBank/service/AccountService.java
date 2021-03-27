@@ -49,4 +49,23 @@ public class AccountService {
         return true;
     }
 
+    public void saveAndFlush(Account account){
+        accountRepo.saveAndFlush(account);
+    }
+
+
+    public Account generateNewAccount(Client client){
+        Integer number = (int)(100_000 + Math.random()*899_999);
+        while(true){
+            if(getByNumber(number) != null){
+                number = (int)(100_000 + Math.random()*899_999);
+                continue;
+            }
+            break;
+        }
+
+        Account account = new Account(number, 0, client);
+        return account;
+    };
+
 }
